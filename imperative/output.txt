@@ -1,0 +1,2 @@
+Amount of roots: 2
+Roots: -1.00+9.95i, -1.00-9.95i
