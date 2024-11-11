@@ -8,65 +8,77 @@ program QuadraticSolver;
 
 uses Math;
 
-function solve_quadratic_equation(a, b, c: Real; var root1, root2, real_part, im_part: Real): Integer;
+type
+    Answer = record
+        code: Integer;
+        roots_amount: Integer;
+        root1: Real;
+        root2: Real;
+        real_part: Real;
+        im_part: Real;
+    end;
+
+function solve_quadratic_equation(a, b, c: Real): Answer;
 var
+    ans: Answer;
     disc: Real;
 begin
     if a = 0 then
-        solve_quadratic_equation := -1
+        ans.code := -1
     else
     begin
         disc := b * b - 4 * a * c;
         if disc < 0 then
         begin
             if b = 0 then
-                real_part := 0
+                ans.real_part := 0
             else
-                real_part := -b / (2 * a);
-            im_part := Sqrt(-disc) / (2 * a);
-            solve_quadratic_equation := 0;
+                ans.real_part := -b / (2 * a);
+            ans.im_part := Sqrt(-disc) / (2 * a);
+            ans.code := 0;
         end;
         if disc = 0 then
         begin
             if b = 0 then 
-                root1 := 0
+                ans.root1 := 0
             else 
-                root1 := -b / (2 * a);
-            solve_quadratic_equation := 1;
+                ans.root1 := -b / (2 * a);
+            ans.code := 1;
         end
         else if disc > 0 then
         begin
-            root1 := (-b + Sqrt(disc)) / (2 * a);
-            root2 := (-b - Sqrt(disc)) / (2 * a);
-            solve_quadratic_equation := 2;
+            ans.root1 := (-b + Sqrt(disc)) / (2 * a);
+            ans.root2 := (-b - Sqrt(disc)) / (2 * a);
+            ans.code := 2;
         end;
     end;
+    solve_quadratic_equation := ans;
 end;
 
 var
-    a, b, c, root1, root2, real_part, im_part: Real;
-    ans: Integer;
+    a, b, c: Real;
+    ans: Answer;
 begin
     ReadLn(a, b, c);
 
-    ans := solve_quadratic_equation(a, b, c, root1, root2, real_part, im_part);
+    ans := solve_quadratic_equation(a, b, c);
 
-    case ans of
+    case ans.code of
         -1: WriteLn('Not quadratic equation.');
         0: 
         begin
             WriteLn('Amount of roots: 2');
-            WriteLn('Roots: ', real_part:0:2, '+', im_part:0:2, 'i, ', real_part:0:2, '-', im_part:0:2, 'i');
+            WriteLn('Roots: ', ans.real_part:0:2, '+', ans.im_part:0:2, 'i, ', ans.real_part:0:2, '-', ans.im_part:0:2, 'i');
         end;
         2: 
         begin
             WriteLn('Amount of roots: 2');
-            WriteLn('Roots: ', root1:0:2, ', ', root2:0:2);
+            WriteLn('Roots: ', ans.root1:0:2, ', ', ans.root2:0:2);
         end; 
         1: 
         begin
             WriteLn('Amount of roots: 1');
-            WriteLn('Roots ', root1:0:2);
+            WriteLn('Roots ', ans.root1:0:2);
         end;
     end;
 end.
